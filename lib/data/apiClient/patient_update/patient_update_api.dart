@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,7 +13,8 @@ void updatePatient(BuildContext context,
     required String female,
     required String date_time,
     required String phone,
-    required String branch}) async {
+    required String branch,
+    required String treatment}) async {
   final box = GetStorage();
   String? token = box.read('token');
   String apiUrl = Api.RegisterUrl;
@@ -31,16 +33,14 @@ void updatePatient(BuildContext context,
     'id': '',
     'male': male,
     'female': female,
-    'treatments': '100',
+    'treatments': treatment,
     'branch': branch
   };
 
-  // Headers
   var headers = {
     'Authorization': 'Bearer $token',
   };
 
-  // Make POST request
   var response = await http.post(
     Uri.parse(apiUrl),
     headers: headers,
@@ -58,6 +58,7 @@ void updatePatient(BuildContext context,
         duration: Duration(seconds: 2),
       ),
     );
+    Get.back();
   } else {
     print('Request failed with status: ${response.statusCode}');
     print('Response: ${response.body}');

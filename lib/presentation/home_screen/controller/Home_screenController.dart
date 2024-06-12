@@ -6,6 +6,8 @@ import '../models/Patient_list_Models/patient_list_model.dart';
 
 class HomeScreencontroller extends GetxController {
   var fetchedPatients = <Patient>[].obs;
+  var isFetching = false.obs;
+
 
   String? formatDate(String dateTime) {
     try {
@@ -23,7 +25,23 @@ class HomeScreencontroller extends GetxController {
   }
 
   Future<void> fetchPatients() async {
-    List<Patient> patients = await fetchData();
-    fetchedPatients.value = patients;
+    if (isFetching.value) return;
+    isFetching.value = true;
+
+    try {
+      List<Patient> patients = await fetchData();
+      fetchedPatients.value = patients;
+    } catch (e) {
+      print("Error fetching patients: $e");
+    } finally {
+      isFetching.value = false;
+    }
+  }
+  Future<void> refreshPatients() async {
+    try {
+      await fetchPatients();
+    } catch (e) {
+      print("Error refreshing patients: $e");
+    }
   }
 }

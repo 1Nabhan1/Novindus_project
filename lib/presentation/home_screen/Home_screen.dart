@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,7 @@ import 'package:nov_project/presentation/home_screen/controller/Home_screenContr
 import 'package:nov_project/routes/PageList/PageList.dart';
 import '../../data/apiClient/Patient_list/Patient_list_api.dart';
 import '../../widgets/Custom_button/Custom_button.dart';
+import '../Inner_page/Inner_page.dart';
 import 'models/Patient_list_Models/patient_list_model.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -76,7 +78,8 @@ class HomeScreen extends StatelessWidget {
                         border: Border.all(color: Colors.grey)),
                     width: 150.w,
                     child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -98,99 +101,120 @@ class HomeScreen extends StatelessWidget {
                 if (homeScreencontroller.fetchedPatients.isEmpty) {
                   return Center(child: CircularProgressIndicator());
                 }
-        
-                return ListView.builder(
-                  itemCount: homeScreencontroller.fetchedPatients.length,
-                  physics: BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    Patient patient = homeScreencontroller.fetchedPatients[index];
-                    List<PatientdetailsSet>? patientDetailsSet =
-                        patient.patientdetailsSet;
-        
-                    return Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Container(
-                        height: 120.h,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(left: 20),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '${index + 1}. ${patient.user ?? 'test'}',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Text(
-                                patientDetailsSet!
-                                    .map((detailsSet) =>
-                                        detailsSet.treatmentName ?? 'null')
-                                    .join(', '),
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.green.shade800,
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Row(
+
+                return RefreshIndicator(
+                  onRefresh: homeScreencontroller.refreshPatients,
+                  child: ListView.builder(
+                    itemCount: homeScreencontroller.fetchedPatients.length,
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      Patient patient =
+                          homeScreencontroller.fetchedPatients[index];
+                      List<PatientdetailsSet>? patientDetailsSet =
+                          patient.patientdetailsSet;
+
+                      return Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Container(
+                          height: 120.h,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 20),
+                                  child: Row(
                                     children: [
-                                      Icon(Icons.calendar_month,
-                                          color: Colors.red),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: Text(homeScreencontroller.formatDate(
-                                                '${patient.dateNdTime ?? ''}') ??
-                                            'null'),
+                                      Text(
+                                        '${index + 1}. ${patient.user ?? 'test'}',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.people, color: Colors.red),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: Text('${patient.name}'),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                              Divider(
-                                height: 1,
-                                color: Colors.grey,
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                child: Row(
+                                ),
+                                Text(
+                                  patientDetailsSet!
+                                      .map((detailsSet) =>
+                                          detailsSet.treatmentName ?? 'null')
+                                      .join(', '),
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.green.shade800,
+                                  ),
+                                ),
+                                Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Text('View Booking details',
-                                        style: TextStyle(fontSize: 15)),
-                                    Icon(Icons.arrow_forward_ios)
+                                    Row(
+                                      children: [
+                                        Icon(Icons.calendar_month,
+                                            color: Colors.red),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Text(
+                                              homeScreencontroller.formatDate(
+                                                      '${patient.dateNdTime ?? ''}') ??
+                                                  'null'),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.people, color: Colors.red),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Text('${patient.name}'),
+                                        ),
+                                      ],
+                                    )
                                   ],
                                 ),
-                              )
-                            ]),
-                      ),
-                    );
-                  },
+                                Divider(
+                                  height: 1,
+                                  color: Colors.grey,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Get.to(() => InnerPage(Treatmentdate:  homeScreencontroller.formatDate(
+                                          patient.dateNdTime ?? '') ??
+                                          '',
+                                        name: patient.name ?? '',
+                                        address: patient.address ?? '',
+                                        number: patient.phone ?? '',
+                                        bookedon:
+                                            homeScreencontroller.formatDate(
+                                                    patient.createdAt ?? '') ??
+                                                '',
+                                      ));
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('View Booking details',
+                                            style: TextStyle(fontSize: 15)),
+                                        Icon(Icons.arrow_forward_ios)
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ]),
+                        ),
+                      );
+                    },
+                  ),
                 );
               }),
             ),

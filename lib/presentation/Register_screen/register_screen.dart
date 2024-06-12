@@ -219,9 +219,9 @@ class RegisterScreen extends StatelessWidget {
                     isExpanded: true,
                     borderRadius: BorderRadius.circular(10),
                     hint: Text('Select Branch'),
-                    value: registerController.initialSelect.value,
+                    value: registerController.initialSelectBranch.value,
                     onChanged: (String? value) {
-                      registerController.initialSelect.value = value!;
+                      registerController.initialSelectBranch.value = value!;
                     },
                     items: registerController.branches.map((branch) {
                       return DropdownMenuItem<String>(
@@ -236,6 +236,42 @@ class RegisterScreen extends StatelessWidget {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: Text(
+                'Treatment',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+              ),
+            ),
+            Obx(
+              () => Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: DropdownButton<String>(
+                    dropdownColor: Colors.grey.shade300,
+                    isExpanded: true,
+                    borderRadius: BorderRadius.circular(10),
+                    hint: Text('Select Treatment'),
+                    value: registerController.initialSelectTreat.value,
+                    onChanged: (String? value) {
+                      registerController.initialSelectTreat.value = value!;
+                    },
+                    items: registerController.treatments.map((treaments) {
+                      return DropdownMenuItem<String>(
+                        value: treaments.name,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text("${treaments.name}"),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -243,10 +279,16 @@ class RegisterScreen extends StatelessWidget {
                 Custombutton(
                     ontap: () {
                       updatePatient(
+                          treatment: registerController.treatments
+                              .firstWhere((treatments) =>
+                                  treatments.name ==
+                                  registerController.initialSelectTreat.value)
+                              .id
+                              .toString(),
                           branch: registerController.branches
                               .firstWhere((branch) =>
                                   branch.name ==
-                                  registerController.initialSelect.value)
+                                  registerController.initialSelectBranch.value)
                               .id
                               .toString(),
                           name: registerController.nameC.text,

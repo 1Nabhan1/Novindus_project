@@ -4,5 +4,6 @@ class Api {
   static const String RegisterUrl = "$baseUrl/PatientUpdate";
   static const String PatientList = "$baseUrl/PatientList";
   static const String BranchList = "$baseUrl/BranchList";
+  static const String Treatments = "$baseUrl/TreatmentList";
 
 }
