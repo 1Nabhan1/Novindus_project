@@ -51,13 +51,14 @@ class HomeScreen extends StatelessWidget {
                         placeholder: 'Search for treatments')),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        fixedSize: Size(MediaQuery.of(context).size.width * .21,
-                            MediaQuery.of(context).size.height * .046),
+                        fixedSize: Size(MediaQuery.of(context).size.width * .25,
+                            MediaQuery.of(context).size.height * .05),
                         backgroundColor: Colors.green.shade800,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5))),
                     onPressed: () {},
                     child: const Text(
+                      textAlign: TextAlign.center,
                       'Search',
                       style: TextStyle(color: Colors.white),
                     ))
@@ -187,17 +188,21 @@ class HomeScreen extends StatelessWidget {
                                   padding: EdgeInsets.symmetric(horizontal: 20),
                                   child: GestureDetector(
                                     onTap: () {
-                                      Get.to(() => InnerPage(Treatmentdate:  homeScreencontroller.formatDate(
-                                          patient.dateNdTime ?? '') ??
-                                          '',
-                                        name: patient.name ?? '',
-                                        address: patient.address ?? '',
-                                        number: patient.phone ?? '',
-                                        bookedon:
-                                            homeScreencontroller.formatDate(
-                                                    patient.createdAt ?? '') ??
-                                                '',
-                                      ));
+                                      Get.to(() => InnerPage(
+                                            Treatmentdate:
+                                                homeScreencontroller.formatDate(
+                                                        patient.dateNdTime ??
+                                                            '') ??
+                                                    '',
+                                            name: patient.name ?? '',
+                                            address: patient.address ?? '',
+                                            number: patient.phone ?? '',
+                                            bookedon:
+                                                homeScreencontroller.formatDate(
+                                                        patient.createdAt ??
+                                                            '') ??
+                                                    '',
+                                          ));
                                     },
                                     child: Row(
                                       mainAxisAlignment:

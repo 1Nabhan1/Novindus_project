@@ -94,7 +94,7 @@ class RegisterScreen extends StatelessWidget {
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 18.0, vertical: 10),
-              child: Customtextfield(
+              child: Customtextfield(keyboerd_type: TextInputType.number,
                 hint_txt: 'Enter your phone',
                 control: registerController.phoneC,
                 fcclr: Colors.blueGrey,
